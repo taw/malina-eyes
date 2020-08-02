@@ -17,22 +17,13 @@
 </script>
 
 <!-- can't use <g> here, Malina does not correctly close the right base type -->
-<svg>
+<g>
   <circle class="eye1" cx={x} cy={y} r={sz}></circle>
   <circle class="eye2" cx={rx} cy={ry} r={sz * 0.5} style="fill: {color}"></circle>
   <circle class="eye3" cx={rx} cy={ry} r={sz * 0.2}></circle>
-</svg>
+</g>
 
 <style>
-  svg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    display: block;
-  }
-
   .eye1 {
     fill: white;
     stroke: black;
