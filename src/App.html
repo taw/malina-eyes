@@ -1,33 +1,65 @@
 <script>
-    let name = 'world';
-    $: degrees = (name.length-5) * 5;
+  import Eye from "./Eye.html"
+
+  function random_color() {
+    let h = Math.random() * 360
+    let s = Math.round(50 + Math.random() * 50)
+    let l = Math.round(30 + Math.random() * 40)
+    return `hsl(${h}, ${s}%, ${l}%)`
+  }
+
+  function eye_distance(eye1, eye2) {
+    let dx = eye1.x - eye2.x;
+    let dy = eye1.y - eye2.y;
+    return Math.sqrt((dx * dx) + (dy * dy))
+  }
+
+  function can_place_eye(new_eye) {
+    return eyes.every(eye =>
+      eye_distance(eye, new_eye) >= eye.sz + new_eye.sz + 5
+    )
+  }
+
+  function onmousemove(event) {
+    let svg = document.getElementById("eyes")
+    let rect = svg.getBoundingClientRect()
+    mx = event.pageX - rect.x
+    my = event.pageY - rect.y
+  }
+
+  let eyes = [];
+  let wh = window.innerHeight;
+  let ww = window.innerWidth;
+  // init it to something random if mouse starts outside window
+  let mx = Math.random() * ww;
+  let my = Math.random() * wh;
+
+  [...Array.from({ length: 1000 })].forEach(_ => {
+    let sz = 20 + Math.random() * 60
+    let x = sz + Math.random() * (ww - 2 * sz)
+    let y = sz + Math.random() * (wh - 2 * sz)
+    let color = random_color()
+    let new_eye = { x, y, sz, color }
+    if (can_place_eye(new_eye)) {
+      eyes.push(new_eye)
+    }
+  });
 </script>
 
-<img src="./malinajs.svg" alt="Malina.js Logo" style:transform={`rotate(${degrees}deg)`}/>
-
-<h1>Hello {name}!</h1>
-
-<div>
-    <input type="text" :value={name} *{$element.focus()} />
+<div id="eyes" on:mousemove={onmousemove}>
+  {#each eyes as eye}
+    <Eye x={eye.x} y={eye.y} mx={mx} my={my} sz={eye.sz} color={eye.color}/>
+  {/each}
 </div>
 
-<div>Edit and save file <code>src/App.html</code> to reload</div>
-
 <style>
-    img{
-        display: block;
-        width: 200px;
-        margin: 60px auto;
-        transition: .2s;
-    }
-
-    h1,div{
-        text-align: center;
-        min-width: 300px;
-        margin: 40px auto;
-    }
-
-    input{
-        font-size: 24px;
-    }
+  #eyes {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    background-color: #aaa;
+  }
+  body {
+    margin: 0;
+  }
 </style>
