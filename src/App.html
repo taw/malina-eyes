@@ -46,11 +46,11 @@
   });
 </script>
 
-<div id="eyes" on:mousemove={onmousemove}>
+<svg id="eyes" on:mousemove={onmousemove}>
   {#each eyes as eye}
     <Eye x={eye.x} y={eye.y} mx={mx} my={my} sz={eye.sz} color={eye.color}/>
   {/each}
-</div>
+</svg>
 
 <style>
   #eyes {
